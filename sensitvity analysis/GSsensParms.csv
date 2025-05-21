@@ -1,0 +1,102 @@
+Parameter,Description,Lifestage
+entrain.upsac,entrainment vulnerability in theUpper Sacramento River,juvenile
+entrain.upMid,entrainment vulnerability in the Upper Mid Sacramento River,juvenile
+entrain.lowMid,entrainment vulnerability in the Lower Mid Sacramento River,juvenile
+entrain.low,entrainment vulnerability in the Lower Sacramento River,juvenile
+entrain.Feath,entrainment vulnerability in the Feather River,juvenile
+entrain.yuba,entrainment vulnerability in the Yuba River,juvenile
+entrain.sj,entrainment vulnerability in the San Joaquin,juvenile
+delta.entrain,entrainment vulnerability in the delta,juvenile
+larvaeS.int,Larvae survival intercept,yoy
+larvae.tmp,larvae temperature survival,yoy
+larvae.Mort,laval mortality,yoy
+juv.TribS.int,juvenile survival intercept in tributaries/river,juvenile
+juvTrib.tmp,juvenile temperature survival in tribs/river,juvenile
+juvTrib.S,juvenile in river Survival,juvenile
+juv.DeltaS.int,juvenile survival intercept in Deltas,juvenile
+juvDelt.tmp,juvenile temperature survival in Deltas,juvenile
+juvDelta.S,juvenile delta Survival,juvenile
+AdultS.int,Prespawn survival intercept,adult
+Adult.tmp,Adult temperature survival,adult
+UpSacjuvmig.int,Juvenile Upper Sacramento outmigration movement intercept,juvenile
+UpSacjuvmigQ,Juvenile Upper Sacramento outmigration flow movement ,juvenile
+Feathjuvmig.int,Juvenile Feather River outmigration movement intercept,juvenile
+FeathjuvmigQ,Juvenile Feather River outmigration flow movement ,juvenile
+yubajuvmig.int,Juvenile Yuba River outmigration movement intercept,juvenile
+yubajuvmigQ,Juvenile Yuba River outmigration flow movement,juvenile
+SJjuvmig.int,Juvenile San Joaquin outmigration movement intercept,juvenile
+SJjuvmigQ,Juvenile San Joaquin outmigration flow movement,juvenile
+spawn.cap,spawning habitat capacity,yoy
+yolo.Strand,yolo bypass stranding probability,adult
+Sutter.Strand,sutter bypass stranding probability,adult
+strand.S,Stranding survival,adult
+Rescue.S,stranding rescue survival,adult
+Abandon.yolo,Spawning abandonment from yolo bypass,adult
+Abandon.sutt,Spawning abandonment from yolo bypass,adult
+Feather.spawnInt,Probability of spawning in Feather River Intercept,adult
+FeatherQspawn,Probability of spawning in Feather River flow,adult
+Yuba.spawnInt,Probability of spawning in Yuba River Intercept,adult
+YubaQspawn,Probability of spawning in Yuba River flow,adult
+SJ.spawnInt,Probability of spawning in San Joaquin River Intercept,adult
+SJQspawn,Probability of spawning in San Joaquin River flow,adult
+SpawnProp.feather,Proportion of spawners going to the Feather River,adult
+SpawnProp.yuba,Proportion of spawners going to the Yuba River,adult
+SpawnProp.sj,Proportion of spawners going to the San Joaquin,adult
+sex.ratio,sex ratio of spawners,adult
+sm.Fecund,small adult fecundity,yoy
+lg.Fecund,large adult fecundity,yoy
+natural.S,annual natural survival in ocean,adult
+bycatch.risk,probability of being caught as bycatch,adult
+bycatch.S,probability of surviving being bycaught,adult
+Age.tranjuv,age transtition from juvenile to subadult,juvenile
+Age.tranSub,age transtition from subadult to small adult,adult
+Age.tranAd,age transition from small adult to large adult,adult
+UpSacAdultmig.int,Adult Upper Sacramento outmigration movement intercept,adult
+UpSacAdultmigQ,Adult Upper Sacramento outmigration flow movement ,adult
+FeathAdultmig.int,Adult Feather River outmigration movement intercept,adult
+FeathAdultmigQ,Adult Feather River outmigration flow movement ,adult
+yubaAdultmig.int,Adult Yuba River outmigration movement intercept,adult
+yubaAdultmigQ,Adult Yuba River outmigration flow movement,adult
+SJAdultmig.int,Adult San Joaquin outmigration movement intercept,adult
+SJAdultmigQ,Adult San Joaquin outmigration flow movement,adult
+eggS.int,Egg survival intercept,yoy
+egg.tmp,Egg temperature survival,yoy
+juv.cap,juvenile carrying capacity,juvenile
+sunset.int,sunset dam passage intercept,yoy
+sunset,sunset dam passage,yoy
+high.pred,high predation larval reduction rate,yoy
+med.pred,medium predation larval reduction rate,yoy
+low.pred,low predation larval reduction rate,yoy
+juv.cold,juvenile mortality due to cold temps,yoy
+larvae.cold,larvae mortality due to cold temps,yoy
+upsac.hab,upper sacramento spawning habitat,yoy
+feather.hab,feather river spawning habitat,yoy
+yuba.hab,yuba river spawning habitat,yoy
+sj.hab,san joaquin spawning habitat,yoy
+upsac.rearhab,Upper sacramento rearing habitat,juvenile
+feather.rearhab,Feather river rearing habitat,juvenile
+yuba.rearhab,yuba river rearing habitat,juvenile
+sj.rearhab,san joaquin rearing habitat,juvenile
+spawn.freq,spawning fequency,adult
+lowmid.mig,monthly migration probability from lower mid sac to lower sac (stepped migration),juvenile
+low.mig0,monthly probability of age 0 fish migrating from lower sacramento to the north delta,juvenile
+low.mig1,monthly probability of age 1 fish migrating from lower sacramento to the north delta,juvenile
+low.mig2,monthly probability of age 2 fish migrating from lower sacramento to the north delta,juvenile
+low.migjuv,monthly probability of juvenile (age 3&4) fish migrating from lower sac to north delta,juvenile
+n.delta.mig,monthly juvenile outmigration probability from north delta to south,juvenile
+s.delta.mig,monthly juvenile outmigration probability from south delta to north,juvenile
+age1.ocean,monthly age 1 bay to ocean outmigration,juvenile
+age2.ocean,monthly age2 bay to ocean outmigration,juvenile
+juv.ocean,monthly juvenile bay to ocean outmigration,juvenile
+age1.bay,monthly transition of age 1 fish moving from deltas to bays,juvenile
+age2.bay,monthly transition of age 2 fish moving from deltas to bays,juvenile
+juv.bay,monthly transition of juvenile fish moving from deltas to bays,juvenile
+age1.back,monthly transition of age 1 fish moving back from bays to deltas,juvenile
+age2.back,monthly transition of age 2 fish moving back from bays to deltas,juvenile
+juv.back,monthly transition of juvenile fish moving back from bays to deltas,juvenile
+cont.mig.prop,Proportion of fish exhibiting a continuous outmigration from their tributaries,juvenile
+SpawnQ.low,Discharge lower bounds of spawning window,yoy
+SpawnQ.high,Discharge upper bounds of spawning window,yoy
+Spawntemp.low,lower temperature bounds of spawning window,yoy
+Spawntemp.high,Upper Temperature bounds of spawning window,yoy
+Egg.S,Egg baseline survival,yoy

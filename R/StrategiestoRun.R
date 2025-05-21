@@ -1,17 +1,7 @@
 #####################################################################
 #####          Decision combinations
 #####################################################################
-# Improve passage at Sunset pumps on Feather River
-# Create passage at Daguerre Point Dam on Yuba River
-# Improve road crossings Yolo bypass
-# Improve road crossings at Sacramento Weir
-# Manipulate selenium in San Joaquin
-# Manage contaminants in San Joaquin
-# Improve spawning and rearing habitat in lower Sacramento #ws?
-# Provide velocity refugia
-# Food additions
-# Increase holding/spawning habitat
-# 
+#
 # DecName<-data.frame(Decision=c(
 #   "do nothing",
 #   "Alter temps to increase incubation temps in Feather River",
@@ -47,7 +37,7 @@
 #   "Spawning flow pulse in the Yuba River",
 #   "Eliminate bycatch"
 # ))
-# 
+#
 # StratName<-data.frame(Decision=c(
 # "do_nothing",
 # "Hassrick_strategy",
@@ -68,11 +58,11 @@
 # "Dudley_strategy"
 # ))
 # StratName<- data.frame(Decision = rep(StratName$Decision, each = 20))
-yrs<-20
 #Load in Cal Sim 3 for Water year type data
 #load("C:/Users/gilliger/Box/Erin Dissertation/SIT sturgeon models/Green Sturgeon Model code/CalSim3_metrics.rda")
 #Wy<-CalSim3_metrics$WaterYearType
 
+yrs<-20
 ###Strategy vector code####
 # Strategy 1: Do nothing - No restoration
 do_nothing_strategy <- list()
@@ -117,7 +107,7 @@ for(i in 1:yrs) {
 }
 
 # Strategy 7: Regulate rearing tempertaures in the Upper Mid Sacramento, Screen
-#diversions in Upper Sac, Upper mid Sac, Lower mid Sacramento, and Lower 
+#diversions in Upper Sac, Upper mid Sac, Lower mid Sacramento, and Lower
 #Sacramento, and Feather River rotating years, increase rearing habitat in the
 #Upper Mid Sacramento and the Upper Sacramento
 juv_surv_strategy <- list()
@@ -157,7 +147,7 @@ for(i in 1:yrs) {
 }
 
 
-# Strategy 9: high in channel flows SJ dry years; wet years manipulate temps during 
+# Strategy 9: high in channel flows SJ dry years; wet years manipulate temps during
 #rearing and spawning
 LowerSpawn_strategy <- list()
 for(i in 1:yrs) {
@@ -176,7 +166,7 @@ for(i in 1:yrs) {
 }
 
 # Strategy 11: Adult rescue efforts at yolo and sutter bypass yearly; increase spawning
-#habitat in the Upper Sacramento and the Feather River, increase rearing 
+#habitat in the Upper Sacramento and the Feather River, increase rearing
 #habitat in the Upper Mid Sacramento; Alter spawning temperatures in
 #Upper Sacramento River
 Spawner_strategy <- list()
@@ -185,7 +175,7 @@ for(i in 1:yrs) {
 }
 
 # Strategy 12: Increase spawning and rearing habitat in the Upper Sacramento, increase
-#rearing habitat in the Upper mid Sacramento, increase spawning and rearing habitat in the Feather River. For wet years manipulate spawning 
+#rearing habitat in the Upper mid Sacramento, increase spawning and rearing habitat in the Feather River. For wet years manipulate spawning
 #temp in Feather,dry years manipulate temp in Upper Sac
 habitat_strategy <- list()
 for(i in 1:yrs) {
@@ -203,7 +193,7 @@ for(i in 1:yrs) {
   Screening_strategy[[i]] <- c(6:14,30)
 }
 
-# Strategy 14: Dry years attraction flow pulse to yuba; wet years manipulate 
+# Strategy 14: Dry years attraction flow pulse to yuba; wet years manipulate
 #spawning temperature in the yuba, screen diversions in yuba, lower mid sac, lower sac
 Yuba_strategy <- list()
 for(i in 1:yrs) {
@@ -214,15 +204,15 @@ for(i in 1:yrs) {
   }
 }
 
-# Strategy 15: Add rearing habitat in Upper, Upper-Mid Sac, 
+# Strategy 15: Add rearing habitat in Upper, Upper-Mid Sac,
 #and Feather River. screen in upper, upper mid, feather,lower mid sac, lower sac, yuba, san joquin
 Steel1_strategy <- list()
 for(i in 1:yrs) {
   Steel1_strategy[[i]] <- c(29,30,36,6,10,7,11,12,8,9)
 }
 
-# Strategy 16: Dry years attraction flow pulse to yuba; wet years manipulate 
-#spawning temperature in the feather, screen diversions in feather, upper sac, upper mid sac, 
+# Strategy 16: Dry years attraction flow pulse to yuba; wet years manipulate
+#spawning temperature in the feather, screen diversions in feather, upper sac, upper mid sac,
 #increase rearing habitat in the upper mid sac and feather
 Steel2_strategy <- list()
 for(i in 1:yrs) {
@@ -253,7 +243,7 @@ decis.cmb<-list(
   "LowerSurv_strategy" = LowerSurv_strategy,
   "Spawner_strategy" = Spawner_strategy,
   "habitat_strategy" = habitat_strategy,
-  "Screening_strategy" = Screening_strategy,             
+  "Screening_strategy" = Screening_strategy,
   "Yuba_strategy" = Yuba_strategy,
   "Steel1_strategy" = Steel1_strategy,
   "Steel2_strategy" = Steel2_strategy,

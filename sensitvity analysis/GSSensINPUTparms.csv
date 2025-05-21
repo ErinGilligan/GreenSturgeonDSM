@@ -1,0 +1,9 @@
+﻿Parameter,Description
+Qmean.vary,Mean discharge
+avgStreamT.vary,Average stream temperature
+avgDeltaT.vary,Average Delta temperature
+habitat.vary,Habitat availability
+river.div.vary,number of diversions in the river
+delta.div.vary,number of diversions in the delta
+Predation.vary,Predation abundance
+stratpop.vary,Starting population
