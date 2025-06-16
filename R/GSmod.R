@@ -79,6 +79,7 @@ N0<-round(matrix(c(n.init$n.age0*4,
 # ### Set up Array
 st.fish<-set.array(N0)
 
+
 run.scenarios<-function(decis.X,runz,years,stochastic){
 
   #For reproducibility
@@ -669,7 +670,7 @@ if(month == 7){ #not sending spawners up just clearing out any delayed spawners 
     apply_adult_survival(i, params[[2]],curr_month=month)
   }
 
-  # Apply survival rates for Sac regions (juvenile only, as per original code)
+  # Apply survival rates for Sac regions (juvenile only)
   sac_regions <- list(
     UpMid = list(6, 16),
     LowMid = list(7, 21),

@@ -51,8 +51,7 @@ source("Spawning.R")
 source("Survival.R")
 source("SpawnDist.R")
 source("stranding.R")
-#source("Entrainment.R")
-source("Old.Entrainment.R")
+source("Entrainment.R")
 source("Ocean.R")
 source("agePop.R")
 source("setArray.R")
@@ -66,7 +65,7 @@ tribsDist<-c(18:20,31)
 #################################################
 ### Begin Population Function
 ################################################
-
+set.seed(1234)
 n.init<-StartPop(n.pop=10000,maxAge=34,Natural.S=0.85)
 N0<-round(matrix(c(n.init$n.age0*4,
                    n.init$n.age1*4,
@@ -127,45 +126,31 @@ Hab<-list(UpSac=UpSacHab,UpMidSac=UpMidSacHab,MidSac=MidSacHab,LowSac=LowSacHab,
 ### Annual dynamics begins begins here 
 ################################################
 run.all<-function(vect=NULL,decis.X,mode='sim',stochastic){
-  TARGET = c(1596, 1172, 1172, 2172, 2442, 1437, 1008) #Dudley et al.2024
-  SSE=0
-obj<-NULL
-for(yr in 1:20){
-  if (decis.X[yr] %in% c(2)) stream_temp[19,3:6,yr]<-pmax(stream_temp[19,3:6,yr],14) #incubation months in Feather
-  if (decis.X[yr] %in% c(3)) stream_temp[19,3:10,yr]<-pmax(stream_temp[19,3:10,yr],16) #rearing months in Feather
-  if (decis.X[yr] %in% c(4)) stream_temp[31,3:6,yr]<-pmin(stream_temp[31,3:6,yr],19.9) #incubation SJ
-  if (decis.X[yr] %in% c(5)) stream_temp[31,3:10,yr]<-pmin(stream_temp[31,3:10,yr],19.9) #rearing SJ
-  if (decis.X[yr] %in% c(6)) diversions[1]<-round(diversions[1]*.90) #screen up sac
-  if (decis.X[yr] %in% c(7)) diversions[19]<-round(diversions[19]*.90) #screen Feather
-  if (decis.X[yr] %in% c(8)) diversions[20]<-round(diversions[20]*.90) #screen yuba
-  if (decis.X[yr] %in% c(9)) diversions[31]<-round(diversions[31]*.90) #screen SJ
-  if (decis.X[yr] %in% c(10)) diversions[16]<-round(diversions[16]*.90) #Screen UpMid
-  if (decis.X[yr] %in% c(11)) diversions[21]<-round(diversions[21]*.90) #Screen Low Mid
-  if (decis.X[yr] %in% c(12)) diversions[24]<-round(diversions[24]*.90) #Screen lower sac
-  if (decis.X[yr] %in% c(13)) dltadivs[1]<-round(dltadivs[1]*.90) #Screen North delta
-  if (decis.X[yr] %in% c(14)) dltadivs[2]<-round(dltadivs[2]*.90) #screen south delta
-  if (decis.X[yr] %in% c(17)) Hab$Feather$Spawning_sq.m<-Hab$Feather$Spawning_sq.m+8093.71 #add 2 acres of spawning habitat to feather
-  if (decis.X[yr] %in% c(19)) Qmean[19,3:6,yr]<-pmax(Qmean[19,3:6,yr],6000)
-  if (decis.X[yr] %in% c(20)) Qmean[20,3:6,yr]<-pmax(Qmean[20,3:6,yr],6000)
-  if (decis.X[yr] %in% c(21)) Qmean[31,1:4,yr]<-pmax(Qmean[31,1:4,yr],1500)
-  if (decis.X[yr] %in% c(22)) Qmean[21,1:3,yr]<-pmax(Qmean[21,1:3,yr],17700)
-  if (decis.X[yr] %in% c(22)) Qmean[24,1:3,yr]<-pmax(Qmean[24,1:3,yr],31100)
-  if (decis.X[yr] %in% c(23)) Hab$Yuba$Spawning_sq.m<-Hab$Yuba$Spawning_sq.m+12000
-  if (decis.X[yr] %in% c(23)) Hab$Yuba$RiverUse_sq.m<-Hab$Yuba$RiverUse_sq.m+12000 #was told 12 rkm-Daguerre Dam
-  if (decis.X[yr] %in% c(24)) stream_temp[1,3:6,yr]<-pmax(stream_temp[1,3:6,yr],14) #incubation UpSac temps
-  if (decis.X[yr] %in% c(25)) stream_temp[20,3:6,yr]<-pmax(stream_temp[20,3:6,yr],14) #incubation Yuba
-  if (decis.X[yr] %in% c(26)) stream_temp[1,3:10,yr]<-pmax(stream_temp[1,3:10,yr],16) #rear UpSac temps
-  if (decis.X[yr] %in% c(27)) stream_temp[16,3:10,yr] <- pmin(pmax(stream_temp[16,3:10,yr], 16), 19.9) #UpMid rear
-  if (decis.X[yr] %in% c(28)) Hab$UpSac$Spawning_sq.m<-Hab$UpSac$Spawning_sq.m+8093.71 #2 acres
-  if (decis.X[yr] %in% c(29)) Hab$UpSac$RiverUse_sq.m<-Hab$UpSac$RiverUse_sq.m+8093.71 #2 acres
-  if (decis.X[yr] %in% c(30)) Hab$UpMidSac$RiverUse_sq.m<-Hab$UpMidSac$RiverUse_sq.m+8093.71 #2 acres
-  if (decis.X[yr] %in% c(31)) Qmean[19,3:6,yr]<-pmax(Qmean[19,3:6,yr],5000)
-  if (decis.X[yr] %in% c(32)) Qmean[20,3:6,yr]<-pmax(Qmean[20,3:6,yr],5000)
-  if (decis.X[yr] %in% c(33)) Hab$Yuba$Spawning_sq.m<-Hab$Yuba$Spawning_sq.m+8093.71 #2 acres
-  if (decis.X[yr] %in% c(34)) Hab$SJ$Spawning_sq.m<-Hab$SJ$Spawning_sq.m+8093.71 #2 acres
-  if (decis.X[yr] %in% c(35)) Hab$SJ$RiverUse_sq.m<-Hab$SJ$RiverUse_sq.m+8093.71 #2 acres
-  if (decis.X[yr] %in% c(36)) Hab$Feather$RiverUse_sq.m<-Hab$Feather$RiverUse_sq.m+8093.71 #2 acres ther$RiverUse_sq.m<-Hab$Feather$RiverUse_sq.m+12545.3 #equals 3.1 acres
+  #For reproducibility
+  options(digits=10)
+  set.seed(1234)
   
+  n.init <- StartPop(n.pop=10000, maxAge=34, Natural.S=0.85)
+  N0 <- round(matrix(c(n.init$n.age0*4,
+                       n.init$n.age1*4,
+                       n.init$n.age2*4,
+                       n.init$n.juvs*4,
+                       n.init$n.sub+n.init$n.marineJ,
+                       n.init$n.sm.ad,
+                       n.init$n.lg.ad), ncol=1))
+  st.fish <- set.array(N0) 
+  
+  TARGET = c(1730, 1449, 1298, 2432, 2403, 1471, 960) #Dudley et al.2024
+  SSE = 0
+  all_pops<-matrix(0,nrow=20,ncol=7)
+  
+  # Debug initial population (optional - you can remove this too if you want)
+  cat("=== INITIAL POPULATION ===\n")
+  cat("st.fish dimensions:", dim(st.fish), "\n")
+  cat("Initial colSums:", colSums(st.fish), "\n")
+  cat("TARGET:", TARGET, "\n")
+for(yr in 1:20){
+ 
   #Every year set up a cumulative distribution for juvenile outmigration
   cumdistrib<-dist.migrators(Qmean, yr)
   cumdistrib2<-matrix(0,nrow=5,ncol=12)
@@ -181,16 +166,22 @@ for(yr in 1:20){
   cumdistrib2[5,1:3]<-cumdistrib$SJ[4:6]
   rear.months <- unname(sapply(cumdistrib, function(river) sum(river < 0.99)))
   
+  #Set up a possibility of a HAB event that wipes out the bay
+  if (yr %in% 10:14) {HAB.prob <- rbeta(1,3,10)} else {HAB.prob <- 0} 
   
 for(month in 1:12){
   if(month==2){
     
     #Set up ocean small adults and draw a spawning pool for the bay
-    st.fish[13,6]<-round(st.fish[14,6]* 0.25)
-    st.fish[14,6]<-round(st.fish[14,6]* 0.75)
-    # large adults
-    st.fish[13,7]<-round(st.fish[14,7]* 0.25)
-    st.fish[14,7]<-round(st.fish[14,7]* 0.75)  
+    # Small adults
+    ocean_small_migrants <- floor(st.fish[14,6] * 0.25)
+    st.fish[13,6] <- st.fish[13,6] + ocean_small_migrants
+    st.fish[14,6] <- st.fish[14,6] - ocean_small_migrants
+    
+    # Large adults
+    ocean_large_migrants <- floor(st.fish[14,7] * 0.25)
+    st.fish[13,7] <- st.fish[13,7] + ocean_large_migrants
+    st.fish[14,7] <- st.fish[14,7] - ocean_large_migrants 
     
     sm.spawners.spawn<-round(rtri(sum(st.fish[13,6]), min=3, max=6,mode=4.5))
     lg.spawners.spawn<-round(rtri(sum(st.fish[13,7]), min=3, max=6,mode=4.5))
@@ -200,23 +191,24 @@ for(month in 1:12){
   
     if(month == 3){
 
- #Assign routes and distribution of spawners
-  spawnroute<-spawndist(spawners=c(sum(sm.spawners.spawn == 3),sum(lg.spawners.spawn == 3)),
-                        Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[yr])
+      #Assign routes and distribution of spawners
+      spawnroute<-spawndist(spawners=c(sum(sm.spawners.spawn == 3),sum(lg.spawners.spawn == 3)),
+                            Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[[yr]],stochastic)
       
-  strand.success<-strand.sub(spawn.rt=spawnroute[1:4,],
-              overtopYolo=CalSim3_metrics$gates_overtopped[month,yr,2],
-              overtopSutter=CalSim3_metrics$gates_overtopped[month,yr,1],
-              stochastic)
-  
-  #Fill in everybody
-  spawners<-rbind(strand.success[[1]],spawnroute[5,])
-  st.fish[1:5,6:7]<-st.fish[1:5,6:7]+spawners
-  st.fish[8:9,6:7]<-strand.success[[2]]
-  
-  #Subtract the fish that initially left
-  st.fish[13,6]<-st.fish[13,6]-sum(sm.spawners.spawn == 3) 
-  st.fish[13,7]<-st.fish[13,7]-sum(lg.spawners.spawn == 3)
+      strand.success<-strand.sub(spawn.rt=spawnroute[1:4,],
+                                 overtopYolo=CalSim3_metrics$gates_overtopped[month,yr,2],
+                                 overtopSutter=CalSim3_metrics$gates_overtopped[month,yr,1],
+                                 stochastic)
+      
+      #Fill in everybody
+      spawners<-rbind(strand.success[[1]],spawnroute[5,])
+      st.fish[1:5,6:7]<-st.fish[1:5,6:7]+spawners
+      st.fish[8:9,6:7]<-strand.success[[2]]
+      
+      #Subtract the fish that initially left
+      st.fish[13,6]<-st.fish[13,6]-sum(sm.spawners.spawn == 3)
+      st.fish[13,7]<-st.fish[13,7]-sum(lg.spawners.spawn == 3)
+      
   
   #Apply carrying capacity
   cap.reached<-Capacity.sub(spawners=st.fish[1:5,6:7],flow=Qmean[tribs2use,month,yr],hab=Hab,stochastic)
@@ -266,7 +258,7 @@ for(month in 1:12){
 
   #Assign routes and distribution of spawners
       spawnroute<-spawndist(spawners=c(sum(sm.spawners.spawn == 4),sum(lg.spawners.spawn == 4)),
-                            Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[yr])
+                            Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[yr],stochastic)
       
       strand.success<-strand.sub(spawn.rt=spawnroute[1:4,],
                                  overtopYolo=CalSim3_metrics$gates_overtopped[month,yr,2],
@@ -340,7 +332,7 @@ st.fish[1,1]<-0 #clear out previous age 0 because they all moved down
       
 #Assign routes and distribution of spawners
   spawnroute<-spawndist(spawners=c(sum(sm.spawners.spawn == 5),sum(lg.spawners.spawn == 5)),
-                        Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[yr])
+                        Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[yr],stochastic)
       
   strand.success<-strand.sub(spawn.rt=spawnroute[1:4,],
                              overtopYolo=CalSim3_metrics$gates_overtopped[month,yr,2],
@@ -412,7 +404,7 @@ st.fish[1,1]<-0 #clear out previous age 0 because they all moved down
       
 #Assign routes and distribution of spawners
   spawnroute<-spawndist(spawners=c(sum(sm.spawners.spawn == 6),sum(lg.spawners.spawn == 6)),
-                        Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[yr])
+                        Qmeans=Qmean[tribsDist,month,yr],decis=decis.X[yr],stochastic)
       
   strand.success<-strand.sub(spawn.rt=spawnroute[1:4,],
                   overtopYolo=CalSim3_metrics$gates_overtopped[month,yr,2],
@@ -536,25 +528,40 @@ if(month == 7){ #not sending spawners up just clearing out any delayed spawners 
     st.fish[1:5,7]<-st.fish[1:5,7]-early_migrants.lg
     #Keep track of holding adults
     store.holders<-c(sum(st.fish[1:5,6:7]))
+    
+    #If there's a HAB event wipe out the bay in august
+    if (stochastic){HAB.event<-rbinom(1,1,HAB.prob)} else {HAB.event<-as.numeric(HAB.prob>0.5)}
+    if (HAB.event==1){st.fish[13,]<-0}
   }
   
-for (month in c(4:9)){
-  #apply entrainment mort to age 0 fish and age 1 and 2 in the lower sac
-  #only occuring april to september of each year
-  entrained<-entrain.sub(fish=st.fish[,1:3],prob.entrain=entrain[1:2],
-                         n.div=diversions,stochastic)
-  st.fish[1:10,1]<-pmax(0, st.fish[1:10,1]-entrained[[1]])
-  st.fish[10,2]<-pmax(0,st.fish[10,2]-entrained[[2]])
-  st.fish[10,3]<-pmax(0,st.fish[10,3]-entrained[[3]])
-  #delta entrainment only apply to age 0-2 fish also entrainment vulnerability is unknown so
-  #just setting it low for now
-  NDelta.entrain<-delta.entrain(fish=st.fish[11,1:3], prob.entrain=entrain[1:2],
-                                n.div=dltadivs[1],stochastic)
-  st.fish[11,1:3]<-pmax(0,st.fish[11,1:3]-NDelta.entrain)
-  SDelta.entrain<-delta.entrain(fish=st.fish[12,1:3],prob.entrain=entrain[1:2],
-                                n.div=dltadivs[2],stochastic)
-  st.fish[12,1:3]<-pmax(0,st.fish[12,1:3]-SDelta.entrain)
-} 
+  if(month >= 4 && month <= 9){
+    entrained<-if (stochastic){entrain.stochastic(fish=st.fish[,1:3],prob.entrain=entrain[1:2],
+                                                  n.div=diversions)
+    }else{
+      entrain.deterministic(fish=st.fish[,1:3],prob.entrain=entrain[1:2],
+                            n.div=diversions)
+    }
+    st.fish[1:10,1]<-pmax(0, st.fish[1:10,1]-entrained[[1]])
+    st.fish[10,2]<-pmax(0,st.fish[10,2]-entrained[[2]])
+    st.fish[10,3]<-pmax(0,st.fish[10,3]-entrained[[3]])
+    #delta entrainment only apply to age 0-2 fish also entrainment vulnerability is unknown so
+    #just setting it low for now
+    NDelta.entrain<-if (stochastic){delta.entrain.stoch(fish=st.fish[11,1:3], prob.entrain=entrain[1:2],
+                                                        n.div=dltadivs[1])
+    }else {
+      delta.entrain.deterministic(fish=st.fish[11,1:3], prob.entrain=entrain[1:2],
+                                  n.div=dltadivs[1])
+    }
+    st.fish[11,1:3]<-pmax(0,st.fish[11,1:3]-NDelta.entrain)
+    SDelta.entrain<-if (stochastic){delta.entrain.stoch(fish=st.fish[12,1:3],prob.entrain=entrain[1:2],
+                                                        n.div=dltadivs[2])
+    }else {
+      delta.entrain.deterministic(fish=st.fish[12,1:3], prob.entrain=entrain[1:2],
+                                  n.div=dltadivs[2])
+    }
+    st.fish[12,1:3]<-pmax(0,st.fish[12,1:3]-SDelta.entrain)
+  } 
+  
   # Pre-compute common values
   month_yr_temps <- stream_temp[, month, yr]
   
@@ -569,11 +576,11 @@ for (month in c(4:9)){
   
   for (i in seq_along(trib_params)) {
     params <- trib_params[[i]]
-    apply_juv_survival(params[[1]], params[[2]],mode="cal",int=vect[3])
-    apply_adult_survival(i, params[[2]])
+    apply_juv_survival(params[[1]], params[[2]],delta=FALSE,curr_month=month,mode="cal",int=vect[3])
+    apply_adult_survival(i, params[[2]],curr_month=month)
   }
   
-  # Apply survival rates for Sac regions (juvenile only, as per original code)
+  # Apply survival rates for Sac regions (juvenile only)
   sac_regions <- list(
     UpMid = list(6, 16),
     LowMid = list(7, 21),
@@ -581,28 +588,29 @@ for (month in c(4:9)){
   )
   
   for (region in sac_regions) {
-    apply_juv_survival(region[[1]], month_yr_temps[region[[2]]],mode="cal",int=vect[3])
+    apply_juv_survival(region[[1]], month_yr_temps[region[[2]]], delta=FALSE, curr_month=month,
+                       mode="cal",int=vect[3])
   }
   
-  # Apply Delta survival rates (juvenile only, as per original code)
+  # Apply Delta survival rates
   delta_regions <- list(
     N = list(11, 1),
     S = list(12, 2)
   )
   
   for (region in delta_regions) {
-    apply_juv_survival(region[[1]], delta_temperature[month, yr, region[[2]]],
-                       mode="cal",int=vect[4], delta = TRUE)
+    apply_juv_survival(region[[1]], delta_temperature[month, yr, region[[2]]],delta=TRUE,
+                       curr_month = month, mode="cal",int=vect[4])
   }
   
-
+  
   ####Movement###
   
   ########OUtmigrate juveniles from tribs (once month gets to 3 send all the leftovers down)
   
-  for (month in c(10:12,1:3)){
-    if (month %in% 1:3) {iter_yr <- yr + 1} else {iter_yr <- yr}
-    
+  if(month >= 10 || month <= 3){
+    # Set iteration year as needed
+    iter_yr <- if(month %in% 1:3) yr + 1 else yr
     # Estimate habitat for each tributary
     pred.juv.UpSac <- estimate_juv_habitat(Qmean[16,month,yr], Hab$UpSac)
     pred.juv.Feather <- estimate_juv_habitat(Qmean[19,month,yr], Hab$Feather)
@@ -654,131 +662,173 @@ for (month in c(4:9)){
     SJmig <- migrate_and_check_capacity(sum(st.fish[5,1]), probabilitySJ, Juv_capacity["SJ"])
     st.fish[5,1] <- SJmig$remaining
     st.fish[12,1] <- st.fish[12,1] + (SJmig$stepped + SJmig$cont)
-  }   
-  
+  }
+
   
   #########Lower Mid Sac to lower Sac (every month)
-  LowMid.mig.prob<-0.80
+  LowMid.mig.prob <- if (stochastic){runif(1,0.36,1)} else {0.59}
   
   #send them down
-  st.fish[10,1:2]<-st.fish[10,1:2]+ round(st.fish[7,1:2]*LowMid.mig.prob)
+  lowMidmigrants <- floor(st.fish[7,1:2]*LowMid.mig.prob)
+  st.fish[10,1:2] <- st.fish[10,1:2] + lowMidmigrants
   #Keep left overs
-  st.fish[7,1:2]<-round(st.fish[7,1:2]*(1-LowMid.mig.prob))
+  st.fish[7,1:2] <- st.fish[7,1:2] - lowMidmigrants
   
   #########lower Sac to North Delta
-  Low.mig.prob0<-runif(1,0.05,0.1)
-  Low.mig.prob1<-runif(1,0.1,0.25)
-  Low.mig.prob2<-1
-  Low.mig.probJuv<-1
+  Low.mig.prob0 <- if (stochastic){rbeta(1,2.16,16.31)} else {0.1}
+  Low.mig.prob1 <- if (stochastic){rbeta(1,3.14,10.16)} else {0.25}
+  Low.mig.prob2 <- if (stochastic){rbeta(1,6.31,0.37)} else {1}
+  Low.mig.probJuv <- if (stochastic){rbeta(1,6.31,0.37)} else {1}
   
-  #send them down
-  st.fish[11,1]<-st.fish[11,1]+ round(st.fish[10,1]*Low.mig.prob0)
-  st.fish[11,2]<-st.fish[11,2]+ round(st.fish[10,2]*Low.mig.prob1)
-  st.fish[11,3]<-st.fish[11,3]+ round(st.fish[10,3]*Low.mig.prob2)
-  st.fish[11,4]<-st.fish[11,4]+ round(st.fish[10,4]*Low.mig.probJuv)
+  low0.migrants <- floor(st.fish[10,1]*Low.mig.prob0)
+  st.fish[11,1] <- st.fish[11,1] + low0.migrants
+  st.fish[10,1] <- st.fish[10,1] - low0.migrants
   
-  #Keep left overs
-  st.fish[10,1]<-round(st.fish[10,1]*(1-Low.mig.prob0))
-  st.fish[10,2]<-round(st.fish[10,2]*(1-Low.mig.prob1))
-  st.fish[10,3]<-round(st.fish[10,3]*(1-Low.mig.prob2))
-  st.fish[10,4]<-round(st.fish[10,4]*(1-Low.mig.probJuv))
+  low1.migrants <- floor(st.fish[10,2]*Low.mig.prob1)
+  st.fish[11,2] <- st.fish[11,2] + low1.migrants
+  st.fish[10,2] <- st.fish[10,2] - low1.migrants
   
+  low2.migrants <- floor(st.fish[10,3]*Low.mig.prob2)
+  st.fish[11,3] <- st.fish[11,3] + low2.migrants
+  st.fish[10,3] <- st.fish[10,3] - low2.migrants
+  
+  lowJuv.migrants <- floor(st.fish[10,4]*Low.mig.probJuv)
+  st.fish[11,4] <- st.fish[11,4] + lowJuv.migrants
+  st.fish[10,4] <- st.fish[10,4] - lowJuv.migrants
   
   #######Delta
   #Do I have anything on migration between deltas (maybe the michael thomas paper)
+  NDelta.mig.prob <- if (stochastic){rbeta(1,4.26,20.51)} else {0.15}
   
-  NDelta.mig.prob<-runif(1,0.1,0.2)
   #send them down
-  st.fish[12,1:4]<-st.fish[12,1:4]+ round(st.fish[11,1:4]*NDelta.mig.prob)
+  ndelta.migrants <- floor(st.fish[11,1:4]*NDelta.mig.prob)
+  st.fish[12,1:4] <- st.fish[12,1:4] + ndelta.migrants
   #Keep left overs
-  st.fish[11,1:4]<-round(st.fish[11,1:4]*(1-NDelta.mig.prob))
+  st.fish[11,1:4] <- st.fish[11,1:4] - ndelta.migrants
   
   #Back the other way
-  SDelta.mig.prob<-runif(1,0.1,0.2)
+  SDelta.mig.prob <- if (stochastic){rbeta(1,4.26,20.51)} else {0.15}
   
   #send them down
-  st.fish[11,1:4]<-st.fish[11,1:4]+ round(st.fish[12,1:4]*SDelta.mig.prob)
+  sdelta.migrants <- floor(st.fish[12,1:4]*SDelta.mig.prob)
+  st.fish[11,1:4] <- st.fish[11,1:4] + sdelta.migrants
   #Keep left overs
-  st.fish[12,1:4]<-round(st.fish[12,1:4]*(1-SDelta.mig.prob))
-  
+  st.fish[12,1:4] <- st.fish[12,1:4] - sdelta.migrants
   
   ######Deltas to bays (kick any subadults out just incase they transitioned here)
-  Delta.mig.prob<-c(0,runif(1,0.05,0.1),runif(1,0.1,0.25),runif(1,0.3,0.5),1)
+  age1bay <- if (stochastic){rbeta(1,3.33, 35.096)} else {0.05}
+  age2bay <- if (stochastic){rbeta(1,3.699, 15.69)} else {0.15}
+  juvbay <- if (stochastic){rbeta(1,11.02, 19.24)} else {0.35}
+  
+  Delta.mig.prob <- c(0,age1bay,age2bay,juvbay,1)
   
   #first S delta
-  st.fish[13,1:5]<-st.fish[13,1:5]+ round(st.fish[12,1:5]*Delta.mig.prob)
+  sdelta2bay.migrants <- floor(st.fish[12,1:5]*Delta.mig.prob)
+  st.fish[13,1:5] <- st.fish[13,1:5] + sdelta2bay.migrants
   #Keep left overs
-  st.fish[12,1:5]<-round(st.fish[12,1:5]*(1-Delta.mig.prob))
+  st.fish[12,1:5] <- st.fish[12,1:5] - sdelta2bay.migrants
   
   #next N delta
-  st.fish[13,1:5]<-st.fish[13,1:5]+ round(st.fish[11,1:5]*Delta.mig.prob)
+  ndelta2bay.migrants <- floor(st.fish[11,1:5]*Delta.mig.prob)
+  st.fish[13,1:5] <- st.fish[13,1:5] + ndelta2bay.migrants
   #Keep left overs
-  st.fish[11,1:5]<-round(st.fish[11,1:5]*(1-Delta.mig.prob))
+  st.fish[11,1:5] <- st.fish[11,1:5] - ndelta2bay.migrants
   
   #allow them to go back (just slightly less unlikely for older fish)
-  Bay2deltas<-c(0,runif(1,0.05,0.1),runif(1,0.1,0.25),runif(1,0.1,0.25))
+  age1back <- if (stochastic){rbeta(1,3.22, 25.88)} else {0.15}
+  age2back <- if (stochastic){rbeta(1,3.62,36.52)} else {0.10}
+  juvback <- if (stochastic){rbeta(1,3.33, 35.096)} else {0.05}
+  Bay2deltas <- c(0,age1back,age2back,juvback)
   
   #first S delta
-  st.fish[12,1:4]<-st.fish[12,1:4]+ round(st.fish[13,1:4]*Bay2deltas)
+  bay2sdelta.migrants <- floor(st.fish[13,1:4]*Bay2deltas)
+  st.fish[12,1:4] <- st.fish[12,1:4] + bay2sdelta.migrants
   #Keep left overs
-  st.fish[13,1:4]<-round(st.fish[13,1:4]*(1-Bay2deltas))
+  st.fish[13,1:4] <- st.fish[13,1:4] - bay2sdelta.migrants
   
   #next N delta
-  st.fish[11,1:4]<-st.fish[11,1:4]+ round(st.fish[13,1:4]*Bay2deltas)
+  bay2ndelta.migrants <- floor(st.fish[13,1:4]*Bay2deltas)
+  st.fish[11,1:4] <- st.fish[11,1:4] + bay2ndelta.migrants
   #Keep left overs
-  st.fish[13,1:4]<-round(st.fish[13,1:4]*(1-Bay2deltas))
-  
+  st.fish[13,1:4] <- st.fish[13,1:4] - bay2ndelta.migrants
   
   ####Bays to ocean include subadults this time
-  Bay.mig.prob<-c(0,0,(runif(1,0.1,0.25)),runif(1,0.2,0.4),1)  
+  age1ocean <- if (stochastic){rbeta(1,1.55, 46.28)} else {0}
+  age2ocean <- if (stochastic){rbeta(1,3.699, 15.69)} else {0.15}
+  juvocean <- if (stochastic){rbeta(1,4.27, 8.9)} else {0.35}
+  Bay.mig.prob <- c(0,age1ocean,age2ocean,juvocean,1)
+  
   #send them out
-  st.fish[14,1:5]<-st.fish[14,1:5]+ round(st.fish[13,1:5]*Bay.mig.prob)
+  bay2ocean.migrants <- floor(st.fish[13,1:5]*Bay.mig.prob)
+  st.fish[14,1:5] <- st.fish[14,1:5] + bay2ocean.migrants
   #Keep left overs
-  st.fish[13,1:5]<-round(st.fish[13,1:5]*(1-Bay.mig.prob))
-  
-  if (month == 11){ #send leftover adults out of the system
-    st.fish[14,6]<-st.fish[14,6]+sum(st.fish[1:5,6])
-    st.fish[1:5,6]<-0
-    st.fish[14,7]<-st.fish[14,7]+sum(st.fish[1:5,7])
-    st.fish[1:5,7]<-0
-  }
-  
+  st.fish[13,1:5] <- st.fish[13,1:5] - bay2ocean.migrants
 } #end month loop
   
-  st.fish<-AgingFunc(population=st.fish)
+  st.fish[14,6]<-st.fish[14,6]+sum(st.fish[1:5,6])
+  st.fish[1:5,6]<-0
+  st.fish[14,7]<-st.fish[14,7]+sum(st.fish[1:5,7])
+  st.fish[1:5,7]<-0
+  
   #ocean survival function
-   st.fish[14,]<-Ocean.Surv(fish=st.fish[14,],decis=decis.X[yr],stochastic)
-
-   #### SIT metrics
-   #keep track numbers annually during simulations
-   obj<-rbind(obj,colSums(st.fish))
-   SSE=SSE+sum((obj- TARGET)^2)
-   
+  st.fish[14,]<-Ocean.Surv(fish=st.fish[14,],decis=decis.X[yr],stochastic)
+  
+  all_pops[yr, ] <- colSums(st.fish)
+  
+  if(mode == "cal") {
+    aging_int <- vect[5:7]
+    st.fish <- AgingFunc(population=st.fish, mode="cal", int=aging_int)
+  } else {
+    st.fish <- AgingFunc(population=st.fish, mode="sim")
+  }
+  
 } #end year loop
-#     
-#     # #add year vector to output
-#     holdr<-rbind(holdr,obj)
-#     # 
-#   }#end simulation loop
-#   # 
-#   holdr<-as.data.frame(holdr)
-#   return(holdr)
-#   # 
+  mean_pop <- colMeans(all_pops)
+  SSE <- sum((mean_pop - TARGET)^2)
+  
+  # debug
+  if(mode == "cal") {
+    cat("Mean population over 20 years:\n")
+    stage_names <- c("Age0", "Age1", "Age2", "Juvenile", "Subadult", "SmallAdult", "LargeAdult")
+    for(i in 1:7) {
+      cat(sprintf("%s: %8.0f vs %8.0f (diff: %8.0f)\n", 
+                  stage_names[i], mean_pop[i], TARGET[i], mean_pop[i] - TARGET[i]))
+    }
+    cat("SSE:", SSE, "\n")
+  }
 return(SSE)
- }#end function
+}#end function
 
 
 #run.all(vect=c(1,1,1,1),decis.X = 1,mode="cal",stochastic=0)
 
 
 yo.dog<-function(vect){
-  run.all(vect=vect,decis.X = 1,mode="cal",stochastic=0)
+  decis_vector <- rep(1, 20)
+  sse <- run.all(vect=vect, decis.X=decis_vector, mode="cal", stochastic=0)
+  return(sse)
 }
-start_time<-Sys.time()
-test_single <- yo.dog(search[1,])
-end_time<-Sys.time()
-end_time-start_time
 
+
+yo.dog.debug <- function(vect) {
+  decis_vector <- rep(1, 20)
+  sse <- run.all(vect=vect, decis.X=decis_vector, mode="cal", stochastic=0)
+  return(sse)
+}
+
+# Test with debug
+
+test_result <- yo.dog.debug(c(0.001, 0.90, 0.99, 0.99, 0.17, 0.22, 0.39))
+
+
+#test_early_bottleneck1 <- yo.dog.debug(c(0.002, 0.91, 0.99, 0.99, 0.20, 0.28, 0.41)) 
+
+# Test with different survival values - these MUST give different results
+test_low <- yo.dog.debug(c(0.0008, 0.95, 0.2, 0.2, 0.2, 0.2, 0.40))   # Should give 0.1 juv, 0.14 delta
+test_high <- yo.dog.debug(c(0.0008, 0.85, 0.8, 0.8, 0.2, 0.2, 0.40))  # Should give 0.4 juv, 0.56 delta
+
+# Test exact original parameters
+test_original_best <- yo.dog.debug(c(0.0005, 0.8200, 0.8200, 0.8200, 0.1600, 0.2800, 0.48))
 
 # 
 # #time it
@@ -807,22 +857,37 @@ clusterExport(cl, c("Qmean", "stream_temp", "Hab", "diversions", "dltadivs", "pr
                     'YubaHab','BearHab','SJHab','stream_temperature'))
 
 #Garbage collection between runs because of memory space issues
-clusterEvalQ(cl,gc())
+#lusterEvalQ(cl,gc())
 
-# exhuastive search
-search<-as.matrix(expand.grid(seq(0.0005,0.2,0.05),
-                              seq(0.10,0.20,0.05),
-                              seq(0.05,0.15,0.05),
-                              seq(0.02,0.08,0.02)))
+#First search coarse to find general parameter region
+search_coarse <- as.matrix(expand.grid(
+  seq(0.0008, 0.001, 0.0001),   #  egg survival 
+  seq(0.88, 0.91, 0.01),         #  larval mortality
+  seq(0.99, 0.99, 0.01),         #  juvenile survival
+  seq(0.99, 0.99, 0.01),         #  delta survival
+  seq(0.14, 0.18, 0.01),         #  Age.smAd
+  seq(0.20, 0.25, 0.01),         #  Age.subAd  
+  seq(0.34, 0.38, 0.01)          #  Age.juv
+))
 
-#seq(0.8,1,0.2)
-#seq(-30,-20,5),
-#seq(-30,-20,5)
-#shot<-apply(search,1,yo.dog)
-#search[which(shot==min(shot)),]
+shot.coarse <- parApply(cl, search_coarse, 1, yo.dog)
+stopCluster(cl)
+best.coarse <- search_coarse[which.min(shot.coarse),]
 
-shot <- parApply(cl, search, 1, yo.dog)
+# Refine around best regions
+search_ultra_fine <- as.matrix(expand.grid(
+  seq(0.0009, 0.0011, 0.00005),  # Around 0.001 ±0.0001
+  seq(0.89, 0.91, 0.005),        # Around 0.90 ±0.01
+  c(0.99),                       # Keep constant
+  c(0.99),                       # Keep constant  
+  seq(0.16, 0.18, 0.005),        # Around 0.17 ±0.01
+  seq(0.21, 0.23, 0.005),        # Around 0.22 ±0.01
+  seq(0.37, 0.39, 0.005)         # Around 0.38 ±0.01
+))
+
+
+shot <- parApply(cl, search_ultra_fine, 1, yo.dog)
 stopCluster(cl)
 
-best <- search[which.min(shot),]
+best <- search_ultra_fine[which.min(shot),]
 

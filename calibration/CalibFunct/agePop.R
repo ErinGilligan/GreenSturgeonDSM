@@ -1,12 +1,12 @@
 # ##################################################################
 # ####       Function to age the pop matrix
 # ################################################################## 
-AgingFunc<- function(population) {
+AgingFunc<- function(population,mode="sim",int=NULL) {
   
-  Age.smAd<-0.07
-  Age.subAd<-0.30
-  Age.juv<-0.5
-  
+  if (mode=="cal") {Age.smAd=int[1]} else {Age.smAd=0.16}
+  if (mode=="cal") {Age.subAd=int[2]} else {Age.smAd=0.28}
+  if (mode=="cal") {Age.juv=int[3]} else {Age.juv=0.48}
+ 
   
   # Age the fish
   population[,7] <- round(population[,7] + (Age.smAd * population[,6]))

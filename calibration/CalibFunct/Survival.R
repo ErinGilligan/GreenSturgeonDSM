@@ -22,7 +22,7 @@ Adult.S<- function(sm.spawn,lg.spawn,avgT,stochastic){
 }
 
 # Create a function for adult survival
-apply_adult_survival <- function(index, temp, stochastic = FALSE) {
+apply_adult_survival <- function(index, temp, curr_month=NA, stochastic = FALSE) {
   st.fish[index, 6:7] <<- Adult.S(st.fish[index, 6], st.fish[index, 7], temp, stochastic)
 }
 
@@ -37,13 +37,25 @@ apply_adult_survival <- function(index, temp, stochastic = FALSE) {
 
 Egg.Surv<- function(avgT, mode="sim",int=NULL){
   
-  if (mode=="cal"){ B0=int} else {B0 = 0.1}
+  B0 <- -15  # Intercept parameter
+  B1 <- 0.65   # Slope parameter
   
-  EggS<-c()
-  for(i in 1:5){
-    #Temperature effect on survival
-    EggS[i]<- max(0,-0.004 * (avgT[i] - 15)^2 + B0)
-  }  
+   if (mode=="cal"){ max_survival=int} else {max_survival = 0.0009}
+  
+  # Base survival using logistic function
+  Temp.Mort <- 1/(1+exp(-(B0 + B1*avgT)))
+  
+  # Add additional decline at cold temperatures (below ~10°C)
+  cold_dip <- 0.20 * exp(-0.01 * (avgT - 0)^2)
+  Temp.Mort <- Temp.Mort + cold_dip
+  # Calculate final survival rate
+  # #mortality stays between 0 and 1
+  Temp.Mort <- pmin(1, pmax(0, Temp.Mort))
+  
+  temp.S <- max_survival * (1 - Temp.Mort)
+  # 
+  # #survival stays between 0 and 1
+  EggS <- pmin(1, pmax(0, temp.S))
   
   return(EggS)
 }
@@ -67,7 +79,7 @@ Larvae.Surv <- function(larvae,avgT,pred,mode="sim",int=NULL,stochastic){
   B0= -15.7102
   B1 = 0.6216
   
-  if (mode=="cal") {baseline.M=int} else {baseline.M=0.13}
+  if (mode=="cal") {baseline.M=int} else {baseline.M=0.89}
 
   larvS<-c()
   for(i in 1:5){
@@ -118,14 +130,14 @@ for(i in 1:5){
 #Function to simulate juvenile survival
 juvTrib_survival <- function(temp,mode="sim",int=NULL) {
   
-  B0 <- -26.5570
-  B1 <- 0.8714
+  B0 <- -11.91
+  B1 <- 0.3857
   
   # calibrate baseline
   if (mode=="cal") {
-    baseline.M = int
+    baseline.S = int
   } else {
-    baseline.M = 0.1  
+    baseline.S = 0.93  
   }
   
   #Calculate mortality
@@ -138,13 +150,14 @@ juvTrib_survival <- function(temp,mode="sim",int=NULL) {
   #mortality stays between 0 and 1
   Temp.Mort <- pmin(1, pmax(0, Temp.Mort))
   
-  temp.S <- (1 - Temp.Mort) * (1 - baseline.M)
+  temp.S <- baseline.S * (1 - Temp.Mort)
   
   #survival stays between 0 and 1
   temp.S <- pmin(1, pmax(0, temp.S))
   
+  return(temp.S)
+  
 }
-
 
 #######################################################
 #####   Juvenile delta survival
@@ -152,20 +165,20 @@ juvTrib_survival <- function(temp,mode="sim",int=NULL) {
 #I want to add predation yet-entrainment is a separate submodel
 Delta.Surv <- function(temp,mode="sim",int=NULL) {
   # Base parameters
-  B0 <- -26.5570
-  B1 <- 0.8714
+  B0 <- -11.91
+  B1 <- 0.3857
   
   #Baseline mortality
   if (mode=="cal") {
-    baseline.M = int
+    baseline.S = int
   } else {
-    baseline.M = 0.05 
+    baseline.S = 0.93 
   }
   
   Temp.Mort <- 1/(1+exp(-(B0 + B1*temp)))
   
   # # Calculate survival rates
-  temp.S <- (1 - Temp.Mort) * (1 - baseline.M)
+  temp.S <- baseline.S * (1 - Temp.Mort)
   
   #survival stays between 0 and 1
   temp.S <- pmin(1, pmax(0, temp.S))
@@ -178,12 +191,13 @@ Delta.Surv <- function(temp,mode="sim",int=NULL) {
 #Delta.Surv(temp=17,mode="cal",int=-0.2)
 
 
-apply_juv_survival <- function(index, temp, delta = FALSE,mode,int) {
+apply_juv_survival <- function(index, temp, delta = FALSE,curr_month= NA,mode,int) {
   surv <- if (delta) Delta.Surv(temp,mode=mode,int=int) else juvTrib_survival(temp,mode=mode,int=int)
   cols <- if (index %in% c(10, 11, 12)) 1:4 else 1:2
   st.fish[index, cols] <<- round(st.fish[index, cols] * surv)
   surv
 }
+
 
 #######################################################
 ##### Temp plot for SIT to review 
