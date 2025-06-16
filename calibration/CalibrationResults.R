@@ -19,17 +19,17 @@ r_squared <- correlation^2
 rmse <- sqrt(mean((observed - predicted)^2))
 
 # color palette for plotting
-grayscale_colors <- c("Observed" = "gray30",      
-                      "Predicted" = "gray70")     
+grayscale_colors <- c("Observed" = "gray30",
+                      "Predicted" = "gray70")
 
 # Figure 2 for Manuscript
 p1 <- ggplot(cal_data, aes(x = LifeStage)) +
-  geom_col(aes(y = Observed, fill = "Observed"), 
-           position = position_dodge(width = 0.8), 
+  geom_col(aes(y = Observed, fill = "Observed"),
+           position = position_dodge(width = 0.8),
            width = 0.4, alpha = 0.8,
            color = "black", size = 0.3) +  # Add black outline
-  geom_col(aes(y = Predicted, fill = "Predicted"), 
-           position = position_dodge(width = 0.8), 
+  geom_col(aes(y = Predicted, fill = "Predicted"),
+           position = position_dodge(width = 0.8),
            width = 0.4, alpha = 0.8,
            color = "black", size = 0.3) +  # Add black outline
   scale_fill_manual(values = grayscale_colors) +
@@ -60,14 +60,14 @@ print(p1)
 
 # Observed vs predicted scatter plot (Not sure if I'll use this one yet)
 p2 <- ggplot(cal_data, aes(x = Observed, y = Predicted)) +
-  geom_point(size = 3, color = "gray30", alpha = 0.8, 
+  geom_point(size = 3, color = "gray30", alpha = 0.8,
              stroke = 0.5, fill = "gray70", shape = 21) +  # Use filled circles
-  geom_smooth(method = "lm", se = TRUE, color = "gray10", 
+  geom_smooth(method = "lm", se = TRUE, color = "gray10",
               fill = "gray80", linetype = "dashed", size = 0.8) +
-  geom_abline(slope = 1, intercept = 0, color = "black", 
+  geom_abline(slope = 1, intercept = 0, color = "black",
               linetype = "solid", size = 0.8) +
-  annotate("text", x = max(observed) * 0.95, y = max(predicted) * 0.3, 
-           label = paste0("R² = ", round(r_squared, 3)), 
+  annotate("text", x = max(observed) * 0.95, y = max(predicted) * 0.3,
+           label = paste0("R² = ", round(r_squared, 3)),
            size = 5, fontface = "bold") +
   labs(
     title = "Observed vs Predicted Values",
@@ -103,3 +103,19 @@ cat("Mean Percent Error:", round(mean(abs((predicted - observed)/observed) * 100
 cal_data$Difference <- predicted - observed
 cal_data$Percent_Error <- round((cal_data$Difference / cal_data$Observed) * 100, 1)
 print(cal_data)
+
+#Print to .png for publication
+ggsave("calibration_Fig.png",
+       plot = p1,
+       width = 10,
+       height = 6,
+       dpi = 300,
+       units = "in")
+
+# Save the second plot (observed vs predicted scatter)
+ggsave("CalibFig_Supplement.png",
+       plot = p2,
+       width = 8,
+       height = 6,
+       dpi = 300,
+       units = "in")
