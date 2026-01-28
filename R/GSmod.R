@@ -593,7 +593,7 @@ if(month == 7){ #not sending spawners up just clearing out any delayed spawners 
 
     ####Movement###
 
- ########OUtmigrate juveniles from tribs (once month gets to 3 send all the leftovers down)
+ ########Outmigrate juveniles from tribs (once month gets to 3 send all the leftovers down)
 
   if(month >= 10 || month <= 3){
     # Set iteration year as needed
