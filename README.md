@@ -119,8 +119,14 @@ search_ultra_fine <- expand.grid(
 shot <- parApply(cl, search_ultra_fine, 1, yo.dog)
 best <- search_ultra_fine[which.min(shot), ]
 ```
+
 ### Outputs
 Calibration produces:
 * optimal parameter vector
 * minimal SSE
 * diagnostic comparisons of simulated vs. target stage abundances
+
+## Sensitivity Analysis
+The Green Sturgeon DSM supports systematic sensitivity analysis to evaluate how uncertainty in biological, environmental, and habitat parameters influences model outcomes. Sensitivity analysis is implemented in the script `GSmodSens.R` and can be run for any of the predefined management strategies
+
+### One-way
