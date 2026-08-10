@@ -127,6 +127,73 @@ Calibration produces:
 * diagnostic comparisons of simulated vs. target stage abundances
 
 ## Sensitivity Analysis
-The Green Sturgeon DSM supports systematic sensitivity analysis to evaluate how uncertainty in biological, environmental, and habitat parameters influences model outcomes. Sensitivity analysis is implemented in the script `GSmodSens.R` and can be run for any of the predefined management strategies
+The Green Sturgeon DSM includes an extensive sensitivity analysis framework designed to quantify how uncertainties in biological parameters, environmental inputs, and habitat characteristics influence model outputs and management strategy performance. Sensitivity analyses are implemented through GSmodSens.R, GSmodOneWayAnalysis.R, and EVPI scripts (EVPI_GS.R, EVPI_GSINPUTS.R).
+This analysis provides insight into:
+* parameter influence on abundance, recruitment, spawner returns, holding adults, river usage, and rearing/spawning duration
+* robustness of management strategies under uncertainty
+* which uncertainties matter most for population outcomes
+* where additional monitoring or data collection would most improve decision making
 
-### One-way
+
+### 1. One-way Sensitivity Analysis
+Each parameter listed in GSsensParms.csv is varied across a defined range of proportional change. For each parameter increment:
+
+1. The DSM is run for every management strategy.
+2. Outputs (abundance, recruitment, spawners, number of rivers, rearing duration, spawning duration, and composite utility) are recorded.
+#### Outputs Produced
+* Strategy attribute correlation matrix
+* Tornado diagrams for each attribute-Each tornado diagram shows the range of possible outcomes for each parameter and ranks parameters by influence.
+* Utility-based tornado diagrams identifying model parameters and inputs with the strongest influence on the overall SIT decision metrics.
+  
+### 2. Expected Value of Perfect Information (EVPI)
+EVPI quantifies how much improved knowledge about uncertain parameters or inputs would increase expected population performance.
+
+#### EVPI on Biological Model Parameters
+Using `EVPI_GS.R`:
+• Probability distributions are assigned to each parameter (normal, beta, uniform depending on the parameter).
+• Model outputs are weighted across parameter distributions.
+• Weighted expected abundance is compared to the best strategy under uncertainty.
+
+#### EVPI on Model Inputs
+Using EVPI_GSINPUTS.R, the same framework is applied to uncertain model inputs:
+* stream temperature
+* Delta temperature
+* flow (CalSim III)
+* river diversions
+* Delta diversions
+* predation intensity
+* tributary habitat availability
+* initial population size
+* HAB event probability
+  
+Output files:
+```r
+EVPI_res.csv
+EVPI_InputRes.csv
+EVPI_InputResDIST.csv
+```
+
+These rank input uncertainties based on their decision-relevant importance.
+
+### 3. Response-Profile Sensitivity Analysis
+Response-profile analysis evaluates how strategy ranking changes across parameter distributions. Code is available in `OneWaySensResults.R`
+
+For each parameter:
+*Strategy utilities are computed across all increments.
+*Parameter response curves are generated (expected utility vs. parameter percentile).
+*The number of times the top strategy or top three strategies change is counted.
+
+This produces:
+• Parameter stability scores
+• Strategy robustness rankings
+• Combined response-profile plots
+• Individual attribute-based response profiles (abundance, recruitment, spawners, large spawners, holders, rivers, rearing duration, spawning duration, utility)
+
+### 4. Interpretation
+Sensitivity analysis results can be used to:
+* identify influential biological processes (e.g., egg survival, juvenile migration, predation, entrainment)
+* identify critical environmental uncertainties (flows, temperature, habitat, diversions)
+* rank management strategies under uncertainty
+* prioritize monitoring or research
+* support structured decision making
+Together, these analyses provide a complete picture of uncertainty propagation in the DSM and how it affects management strategy evaluation.
