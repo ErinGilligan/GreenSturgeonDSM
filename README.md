@@ -8,39 +8,39 @@ The repository is organized into directories that separate the core model, calib
 
 ### R/
 Primary model scripts and function libraries.
-*`GSmod.R`- main green sturgeon DSM model
-*`StrategiestoRun.R`- Run SIT strategies through the DSM
-*`Functions/`- all sub-model components (movement, spawning, survival, entrainment, habitat capacity, etc.)
-*`Results`- outputs generated from model runs
+* `GSmod.R`- main green sturgeon DSM model
+* `StrategiestoRun.R`- Run SIT strategies through the DSM
+* `Functions/`- all sub-model components (movement, spawning, survival, entrainment, habitat capacity, etc.)
+* `Results`- outputs generated from model runs
 
 ### Optimize/
 Contains scripts and outputs related to optimization of mode parameters or strategies.
-*`GSmodOpt.R`- optimization model
-*`OPTIMIZE.R`- processing and running optimization
-*`OptimizeResults.rds`- saved optimization results
+* `GSmodOpt.R`- optimization model
+* `OPTIMIZE.R`- processing and running optimization
+* `OptimizeResults.rds`- saved optimization results
 
 ### calibration/
 Contains calibration functions, scripts, and figures.
-*`GSmodCalibrate.R`- calibration model
-*`CalibrationResults.R`- processing/plotting of calibration outputs
-*`calibration_Fig.png` and `CalibFig_Supplement.png`- calibration figures
-*`functions/`- calibration-specific functions
+* `GSmodCalibrate.R`- calibration model
+* `CalibrationResults.R`- processing/plotting of calibration outputs
+* `calibration_Fig.png` and `CalibFig_Supplement.png`- calibration figures
+* `functions/`- calibration-specific functions
 
 ### data/
 All data required to run the DSM.
 * Tributary habitat-flow curves
-*`EntrainmentProbs.csv`
-*`CalSim3_metrics.rda`
-*`stream_temperature.rda`
-*`delta_temperature.rda`
+* `EntrainmentProbs.csv`
+* `CalSim3_metrics.rda`
+* `stream_temperature.rda`
+* `delta_temperature.rda`
 * Other required hydrological and biological input datasets
 
 ### sensitivity analysis/
 Scripts, datasets, EVPI tools, and output figures related to sensitivity analysis.
-*`GSmodSens.R`- sensitivity model
-*`GSmodOneWayAnalysis.R`- Running the sensitivity model runs
-*`OneWaySensResults.R`-process model parameter sensitivity results
-*`OneWaySensINPUTS.R`- process input sensitivity results
+* `GSmodSens.R`- sensitivity model
+* `GSmodOneWayAnalysis.R`- Running the sensitivity model runs
+* `OneWaySensResults.R`-process model parameter sensitivity results
+* `OneWaySensINPUTS.R`- process input sensitivity results
 * `.csv`files containing biological and input parameters for analyses
 * `Color_tornado.png`- tornado diagram (model parameters)
 * `sensitivity_tornadoInput.png`- tornado diagram (model inputs)
