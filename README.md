@@ -222,15 +222,15 @@ These rank input uncertainties based on their decision-relevant importance.
 Response-profile analysis evaluates how strategy ranking changes across parameter distributions. Code is available in `OneWaySensResults.R`
 
 For each parameter:
-*Strategy utilities are computed across all increments.
-*Parameter response curves are generated (expected utility vs. parameter percentile).
-*The number of times the top strategy or top three strategies change is counted.
+* Strategy utilities are computed across all increments.
+* Parameter response curves are generated (expected utility vs. parameter percentile).
+* The number of times the top strategy or top three strategies change is counted.
 
 This produces:
-• Parameter stability scores
-• Strategy robustness rankings
-• Combined response-profile plots
-• Individual attribute-based response profiles (abundance, recruitment, spawners, large spawners, holders, rivers, rearing duration, spawning duration, utility)
+* Parameter stability scores
+* Strategy robustness rankings
+* Combined response-profile plots
+* Individual attribute-based response profiles (abundance, recruitment, spawners, large spawners, holders, rivers, rearing duration, spawning duration, utility)
 
 ### 4. Interpretation
 Sensitivity analysis results can be used to:
@@ -239,4 +239,19 @@ Sensitivity analysis results can be used to:
 * rank management strategies under uncertainty
 * prioritize monitoring or research
 * support structured decision making
-Together, these analyses provide a complete picture of uncertainty propagation in the DSM and how it affects management strategy evaluation.
+
+## Primary Authors
+Erin Lunda,
+Minnesota Department of Natural Resouces
+Grand Rapids, MN 55744
+erin.lunda@state.mn.us
+
+James T. Peterson,
+U.S. Geological Survey, Oregon Cooperative Fish and Wildlife
+Research Unit, Oregon State University
+Corvallis, Oregon 97331-3803, jt.peterson@oregonstate.edu
+
+Adam Duarte,
+USDA Forest Service, Pacific Northwest Research Station
+Olympia, Washington 98512
+adam.duarte@usda.gov
